@@ -1,7 +1,11 @@
-CREATE DATABASE book_shop;
+/*-- String functios --*/
+/*---------------------*/
 
+-- Create database book shop
+CREATE DATABASE book_shop;
 USE book_shop;
 
+-- Create table books
 CREATE TABLE books 
 	(
 		book_id INT NOT NULL AUTO_INCREMENT,
@@ -14,6 +18,7 @@ CREATE TABLE books
 		PRIMARY KEY(book_id)
 	);
 
+-- 3 Insert data in table
 INSERT INTO books (title, author_fname, author_lname, released_year, stock_quantity, pages)
 VALUES
 ('The Namesake', 'Jhumpa', 'Lahiri', 2003, 32, 291),
@@ -70,18 +75,26 @@ mysql> SELECt * FROM books;
 |      16 | Consider the Lobster                                | David        | Foster Wallace |          2005 |             92 |   343 |
 +---------+-----------------------------------------------------+--------------+----------------+---------------+----------------+-------+
 
+/*-----------------------------------------------------------*/
 
+/*
 
-mysql string functions
-https://dev.mysql.com/doc/refman/8.0/en/string-functions.html
+For more informaton about my Sql string function 
 
+refer below website
 
+*** https://dev.mysql.com/doc/refman/8.0/en/string-functions.html ****
 
+*/
 
+/*-----------------------------------------------------------*/
 
-CONCAT
-======
+/*-- CONCAT --*/
+/*------------*/
 
+--	Return concatenated string
+
+-- 1 )
 SELECT
   CONCAT(author_fname, ' ', author_lname)
 FROM books;
@@ -106,9 +119,19 @@ FROM books;
 | David Foster Wallace                    |
 +-----------------------------------------+
 
+SELECT
+  CONCAT(author_fname, ' ', author_lname) AS 'full name'
+FROM books;
 
+
+/*-- CONCAT with seprator --*/
+/*--------------------------*/
+
+-- seprating title and name with '-' seprator
 SELECT CONCAT(title, '-', author_fname, '-', author_lname) FROM books;
- 
+
+-- if you want to add a common seprator like above,
+-- we can use the CONCAT_WS i.e. with seprator 
 SELECT 
     CONCAT_WS(' - ', title, author_fname, author_lname) 
 FROM books;
@@ -122,15 +145,18 @@ FROM books;
 ...
 +------------------------------------------------------------------------+
 
+/*-----------------------------------------------------------*/
 
 
 
+/*-- SUBSTRING --*/
+/*---------------*/
 
-SUBSTRING
-=========
+/*
+	In SQL index start from 1 (one)
+*/
 
-In SQL index start from 1.
-
+-- syntax : SUBSTRING(String,start,end)
 mysql> SELECT SUBSTRING('Hello  World',1,4);
 +-------------------------------+
 | SUBSTRING('Hello  World',1,4) |
@@ -145,6 +171,7 @@ mysql> SELECT SUBSTRING('Hello World', 3, 8);
 | llo Worl                       |
 +--------------------------------+
 
+-- syntax : SUBSTRING(String, currentIndexToLast)
 mysql> SELECT SUBSTRING('Hello World', 4);
 +-----------------------------+
 | SUBSTRING('Hello World', 4) |
@@ -152,13 +179,14 @@ mysql> SELECT SUBSTRING('Hello World', 4);
 | lo World                    |
 +-----------------------------+
 
+-- syntax : SUBSTRING(String, - lastToSpecivedValueCount)
 mysql> SELECT SUBSTRING('Hello World', -3);
 +------------------------------+
 | SUBSTRING('Hello World', -3) |
 +------------------------------+
 | rld                          |
 +------------------------------+
-1 row in set (0.00 sec)
+
 
 mysql> SELECT SUBSTRING('Hello World', -7);
 +------------------------------+
@@ -167,7 +195,7 @@ mysql> SELECT SUBSTRING('Hello World', -7);
 | o World                      |
 +------------------------------+
 
-
+-- Shortcut for SUBSTRING is SUBSTR
 SELECT SUBSTRING(title, 1, 10) AS 'short title' FROM books;
 SELECT SUBSTR(title, 1, 10) AS 'short title' FROM books;
 +-------------+
@@ -214,20 +242,32 @@ SELECT CONCAT(SUBSTRING(title, 1, 10),'...') AS 'short title' FROM books;
 | Consider t... |
 +---------------+
 
+/*-----------------------------------------------------------*/
 
 
-REPLACE
-========
 
-It is case. sensative.
+/*-- REPLACE --*/
+/*-------------*/
 
+-- This command is case sensitive with string value
+-- Also string values are accpected in quotes
+-- and intiger will work withot quotes
+-- Example - this works 
 mysql> SELECT REPLACE('Hello World', 'Hell', '%$#@');
 +----------------------------------------+
 | REPLACE('Hello World', 'Hell', '%$#@') |
 +----------------------------------------+
 | %$#@o World                            |
 +----------------------------------------+
+-- But this not 
+mysql> SELECT REPLACE('Hello World', 'hell', '%$#@');
++----------------------------------------+
+| REPLACE('Hello World', 'hell', '%$#@') |
++----------------------------------------+
+| Hello World                            |
++----------------------------------------+
 
+-- replace l with 7
 mysql> SELECT REPLACE('Hello World', 'l', '7');
 +----------------------------------+
 | REPLACE('Hello World', 'l', '7') |
@@ -235,14 +275,15 @@ mysql> SELECT REPLACE('Hello World', 'l', '7');
 | He77o Wor7d                      |
 +----------------------------------+
 
+-- replace o with 0
 mysql> SELECT REPLACE('Hello World', 'o', '0');
 +----------------------------------+
 | REPLACE('Hello World', 'o', '0') |
 +----------------------------------+
 | Hell0 W0rld                      |
 +----------------------------------+
-1 row in set (0.00 sec)
 
+-- replace o with *
 mysql> SELECT REPLACE('HellO World', 'o', '*');
 +----------------------------------+
 | REPLACE('HellO World', 'o', '*') |
@@ -250,8 +291,22 @@ mysql> SELECT REPLACE('HellO World', 'o', '*');
 | HellO W*rld                      |
 +----------------------------------+
 
+-- works with integer 
+mysql> SELECT REPLACE('Hello World 987', 87, 66);
++------------------------------------+
+| REPLACE('Hello World 987', 87, 66) |
++------------------------------------+
+| Hello World 966                    |
++------------------------------------+
+
+-- String value without quotes
+mysql> SELECT REPLACE('Hello World 987', 9, k);
+ERROR 1054 (42S22): Unknown column 'k' in 'field list'
+
+-- replace 'e ' with '3' form title
 SELECT REPLACE(title, 'e ', '3') FROM books;
  
+-- Substring title from 1 to 10
 SELECT CONCAT(SUBSTRING(title,1,10),'...') AS 'short tittle' FROM books;
 +---------------+
 | short tittle  |
@@ -274,7 +329,7 @@ SELECT CONCAT(SUBSTRING(title,1,10),'...') AS 'short tittle' FROM books;
 | Consider t... |
 +---------------+
 
-
+-- Substring title and replace e with 3
 mysql> SELECT SUBSTRING(REPLACE(title, 'e', '3'), 1, 10) AS 'weird string' FROM books;
 +--------------+
 | weird string |
@@ -297,25 +352,60 @@ mysql> SELECT SUBSTRING(REPLACE(title, 'e', '3'), 1, 10) AS 'weird string' FROM 
 | Consid3r t   |
 +--------------+
 
+-- Substring title and replace e with 3 and concat title with ...
+mysql> SELECT CONCAT(SUBSTRING(REPLACE(title,'e','V'),1,10),'...') AS 'weired string...' FROM books;
++------------------+
+| weired string... |
++------------------+
+| ThV NamVsa...    |
+| NorsV Myth...    |
+| AmVrican G...    |
+| IntVrprVtV...    |
+| A Hologram...    |
+| ThV CirclV...    |
+| ThV Amazin...    |
+| Just Kids...     |
+| A HVartbrV...    |
+| CoralinV...      |
+| What WV Ta...    |
+| WhVrV Im ...     |
+| WhitV Nois...    |
+| CannVry Ro...    |
+| Oblivion: ...    |
+| ConsidVr t...    |
++------------------+
 
-REVERSE
-========
+
+/*-----------------------------------------------------------*/
+
+
+
+/*-- REVERSE --*/
+/*-------------*/
+
 
 SELECT REVERSE('Hello World');
- 
-SELECT REVERSE('meow meow');
++------------------------+
+| REVERSE('Hello World') |
++------------------------+
+| dlroW olleH            |
++------------------------+
  
 SELECT REVERSE(author_fname) FROM books;
  
 SELECT CONCAT('woof', REVERSE('woof'));
  
-SELECT CONCAT(author_fname, REVERSE(author_fname)) FROM books;
+SELECT CONCAT(author_fname, ' ', REVERSE(author_fname)) FROM books;
+
+
+/*-----------------------------------------------------------*/
 
 
 
-CHAR_LENGTH
-===========
+/*-- CHAR_LENGTH --*/
+/*-----------------*/
 
+-- select firstName is 'length' character long 
 SELECT 
 	CONCAT(author_fname,' ','is ',CHAR_LENGTH(author_fname),' character long') 
 FROM books;
@@ -341,9 +431,13 @@ FROM books;
 +----------------------------------------------------------------------------+
 
 
+/*-----------------------------------------------------------*/
 
-UPPER and LOWER
-===============
+
+
+/*-- UPPER and LOWER --*/
+/*---------------------*/
+
 
 SELECT UPPER('Hello World');
  
@@ -355,27 +449,53 @@ SELECT CONCAT('MY FAVORITE BOOK IS ', UPPER(title)) FROM books;
  
 SELECT CONCAT('MY FAVORITE BOOK IS ', LOWER(title)) FROM books;
 
--------------------------------------------------------------------------------------
-order is important when dealing with combining/wrapping certain string functions.
+-- Tried with integer but no error
+mysql> SELECT CONCAT('MY FAVORITE BOOK IS ', UPPER(pages)) FROM books;
++----------------------------------------------+
+| CONCAT('MY FAVORITE BOOK IS ', UPPER(pages)) |
++----------------------------------------------+
+| MY FAVORITE BOOK IS 291                      |
+| MY FAVORITE BOOK IS 304                      |
+| MY FAVORITE BOOK IS 465                      |
+| MY FAVORITE BOOK IS 198                      |
+| MY FAVORITE BOOK IS 352                      |
+| MY FAVORITE BOOK IS 504                      |
+| MY FAVORITE BOOK IS 634                      |
+| MY FAVORITE BOOK IS 304                      |
+| MY FAVORITE BOOK IS 437                      |
+| MY FAVORITE BOOK IS 208                      |
+| MY FAVORITE BOOK IS 176                      |
+| MY FAVORITE BOOK IS 526                      |
+| MY FAVORITE BOOK IS 320                      |
+| MY FAVORITE BOOK IS 181                      |
+| MY FAVORITE BOOK IS 329                      |
+| MY FAVORITE BOOK IS 343                      |
++----------------------------------------------+
 
-For example:
 
-This works:
+/*-----------------------------------------------------------*/
 
+/*
+
+Order is important when dealing with combining/wrapping certain string functions.
+
+*/
+
+
+-- For example:
+-- This works:
 SELECT UPPER(CONCAT(author_fname, ' ', author_lname)) AS "full name in caps"
 FROM books;
 While this does not:
-
+-- But this not
 SELECT CONCAT(UPPER(author_fname, ' ', author_lname)) AS "full name in caps" 
 FROM books;
-UPPER only takes one argument and CONCAT takes two or more arguments, so they cant be switched in that way.
+-- Beacuse UPPER only takes one argument and CONCAT takes two or more arguments, 
+-- so they cant be switched in that way.
 
-You could do it this way, however:
-
+-- You could do it this way, however:
 SELECT CONCAT(UPPER(author_fname), ' ', UPPER(author_lname)) AS "full name in caps" 
 FROM books;
-----------------------------------------------------------------------------------------
 
-
-
+/*-----------------------------------------------------------*/
 

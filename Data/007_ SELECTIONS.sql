@@ -1,10 +1,39 @@
+/*-- Selections --*/
+/*----------------*/
+
+-- Insert new data in books table
 INSERT INTO books
     (title, author_fname, author_lname, released_year, stock_quantity, pages)
     VALUES ('10% Happier', 'Dan', 'Harris', 2014, 29, 256), 
            ('fake_book', 'Freida', 'Harris', 2001, 287, 428),
            ('Lincoln In The Bardo', 'George', 'Saunders', 2017, 1000, 367);
  
- 
+-- Table values
++---------+-----------------------------------------------------+--------------+----------------+---------------+----------------+-------+
+| book_id | title                                               | author_fname | author_lname   | released_year | stock_quantity | pages |
++---------+-----------------------------------------------------+--------------+----------------+---------------+----------------+-------+
+|       1 | The Namesake                                        | Jhumpa       | Lahiri         |          2003 |             32 |   291 |
+|       2 | Norse Mythology                                     | Neil         | Gaiman         |          2016 |             43 |   304 |
+|       3 | American Gods                                       | Neil         | Gaiman         |          2001 |             12 |   465 |
+|       4 | Interpreter of Maladies                             | Jhumpa       | Lahiri         |          1996 |             97 |   198 |
+|       5 | A Hologram for the King: A Novel                    | Dave         | Eggers         |          2012 |            154 |   352 |
+|       6 | The Circle                                          | Dave         | Eggers         |          2013 |             26 |   504 |
+|       7 | The Amazing Adventures of Kavalier & Clay           | Michael      | Chabon         |          2000 |             68 |   634 |
+|       8 | Just Kids                                           | Patti        | Smith          |          2010 |             55 |   304 |
+|       9 | A Heartbreaking Work of Staggering Genius           | Dave         | Eggers         |          2001 |            104 |   437 |
+|      10 | Coraline                                            | Neil         | Gaiman         |          2003 |            100 |   208 |
+|      11 | What We Talk About When We Talk About Love: Stories | Raymond      | Carver         |          1981 |             23 |   176 |
+|      12 | Where Im Calling From: Selected Stories             | Raymond      | Carver         |          1989 |             12 |   526 |
+|      13 | White Noise                                         | Don          | DeLillo        |          1985 |             49 |   320 |
+|      14 | Cannery Row                                         | John         | Steinbeck      |          1945 |             95 |   181 |
+|      15 | Oblivion: Stories                                   | David        | Foster Wallace |          2004 |            172 |   329 |
+|      16 | Consider the Lobster                                | David        | Foster Wallace |          2005 |             92 |   343 |
+|      17 | 10% Happier                                         | Dan          | Harris         |          2014 |             29 |   256 |
+|      18 | fake_book                                           | Freida       | Harris         |          2001 |            287 |   428 |
+|      19 | Lincoln In The Bardo                                | George       | Saunders       |          2017 |           1000 |   367 |
++---------+-----------------------------------------------------+--------------+----------------+---------------+----------------+-------+
+
+-- Select only title
 SELECT title FROM books;
 +-----------------------------------------------------+
 | title                                               |
@@ -30,14 +59,18 @@ SELECT title FROM books;
 | Lincoln In The Bardo                                |
 +-----------------------------------------------------+
 
+/*-----------------------------------------------------------*/
 
 
 
-DISTINCT
-==================
+/*-- DISTINCT --*/
+/*--------------*/
 
-DISTICT is used only after SELECT
+/*
+Note : DISTICT is used only after SELECT
+*/
 
+-- Select only autor name; observe repeted values
 mysql> SELECT author_lname FROM books;
 +----------------+
 | author_lname   |
@@ -63,6 +96,7 @@ mysql> SELECT author_lname FROM books;
 | Saunders       |
 +----------------+
 
+-- Select with DISTINCT; no repeted value
 mysql> SELECT DISTINCT author_lname FROM books;
 +----------------+
 | author_lname   |
@@ -80,6 +114,7 @@ mysql> SELECT DISTINCT author_lname FROM books;
 | Saunders       |
 +----------------+
 
+-- Select fname and lname; observe repeted values
 mysql> SELECT author_fname, author_lname FROM books;
 +--------------+----------------+
 | author_fname | author_lname   |
@@ -105,8 +140,48 @@ mysql> SELECT author_fname, author_lname FROM books;
 | George       | Saunders       |
 +--------------+----------------+
 
-
+-- Select DISTINCT with CONCAT fname and laname; observe no repeted values
+-- Dan Harris and Freida Harris, appear sepratly
 SELECT DISTINCT CONCAT(author_fname,' ', author_lname) FROM books;
++----------------------------------------+
+| CONCAT(author_fname,' ', author_lname) |
++----------------------------------------+
+| Jhumpa Lahiri                          |
+| Neil Gaiman                            |
+| Dave Eggers                            |
+| Michael Chabon                         |
+| Patti Smith                            |
+| Raymond Carver                         |
+| Don DeLillo                            |
+| John Steinbeck                         |
+| David Foster Wallace                   |
+| Dan Harris                             |
+| Freida Harris                          |
+| George Saunders                        |
++----------------------------------------+
+
+-- Select DISTINCT with CONCAT lname and faname; observe no repeted values
+-- Harris Dan & Harris Freida, appear sepratly
+SELECT DISTINCT CONCAT(author_lname,' ', author_fname) FROM books;
++----------------------------------------+
+| CONCAT(author_lname,' ', author_fname) |
++----------------------------------------+
+| Lahiri Jhumpa                          |
+| Gaiman Neil                            |
+| Eggers Dave                            |
+| Chabon Michael                         |
+| Smith Patti                            |
+| Carver Raymond                         |
+| DeLillo Don                            |
+| Steinbeck John                         |
+| Foster Wallace David                   |
+| Harris Dan                             |
+| Harris Freida                          |
+| Saunders George                        |
++----------------------------------------+
+
+-- Using DISTINCT without CONCAT -- first parameter is fname;
+-- Observe Harris is repiting in lname as it has different fname
 SELECT DISTINCT author_fname, author_lname FROM books;
 +--------------+----------------+
 | author_fname | author_lname   |
@@ -125,6 +200,9 @@ SELECT DISTINCT author_fname, author_lname FROM books;
 | George       | Saunders       |
 +--------------+----------------+
 
+-- Using DISTINCT without CONCAT -- first parameter is lname;
+-- Observe Harris is repiting in lname as it has different fname
+-- It gives the same result, conclution oder of column does not matter 
 mysql> SELECT DISTINCT author_lname, author_fname FROM books;                                                       
 +----------------+--------------+
 | author_lname   | author_fname |
@@ -142,15 +220,23 @@ mysql> SELECT DISTINCT author_lname, author_fname FROM books;
 | Harris         | Freida       |
 | Saunders       | George       |
 +----------------+--------------+
-SAME
+
+
+/*-----------------------------------------------------------*/
 
 
 
-ORDER BY
-================
+/*-- ORDER BY --*/
+/*--------------*/
 
-Ascending by default.
+/*
 
+Note : When we use ORDER By it is ascending by default.
+
+*/
+
+-- Select lname and sort in ascending order by lname
+-- It is ascending order by default
 mysql> SELECT author_lname FROM books ORDER BY author_lname;
 +----------------+
 | author_lname   |
@@ -177,6 +263,7 @@ mysql> SELECT author_lname FROM books ORDER BY author_lname;
 +----------------+
 
 
+-- Select lname and ort it by lname in decending order
 mysql> SELECT author_lname FROM books ORDER BY author_lname DESC;
 +----------------+
 | author_lname   |
@@ -202,7 +289,7 @@ mysql> SELECT author_lname FROM books ORDER BY author_lname DESC;
 | Carver         |
 +----------------+
 
-
+-- Select title and sort in decending order by title 
 mysql> SELECT title FROM books ORDER BY title DESC;                                                                
 +-----------------------------------------------------+
 | title                                               |
@@ -228,7 +315,7 @@ mysql> SELECT title FROM books ORDER BY title DESC;
 | 10% Happier                                         |
 +-----------------------------------------------------+
 
-
+-- Select released_year and sort in ascending order by released_year
 mysql> SELECT released_year FROM books ORDER BY released_year ASC;
 +---------------+
 | released_year |
@@ -254,7 +341,7 @@ mysql> SELECT released_year FROM books ORDER BY released_year ASC;
 |          2017 |
 +---------------+
 
-
+-- released_year is present in select and order by clause
 mysql> SELECT title, released_year, pages FROM books ORDER BY released_year;
 +-----------------------------------------------------+---------------+-------+
 | title                                               | released_year | pages |
@@ -280,7 +367,7 @@ mysql> SELECT title, released_year, pages FROM books ORDER BY released_year;
 | Lincoln In The Bardo                                |          2017 |   367 |
 +-----------------------------------------------------+---------------+-------+
 
-
+-- released_year is not present in select but present in order by clause
 mysql> SELECT title, pages FROM books ORDER BY released_year;
 +-----------------------------------------------------+-------+
 | title                                               | pages |
@@ -306,7 +393,10 @@ mysql> SELECT title, pages FROM books ORDER BY released_year;
 | Lincoln In The Bardo                                |   367 |
 +-----------------------------------------------------+-------+
 
-
+-- We can also specify numeric value in ORDER BY Clause
+-- the number represent the index of SELECT clause column
+-- in this example it is author_fname
+-- the bleow table is sorted by author_fname
 mysql> SELECT title, author_fname, author_lname  FROM books ORDER BY 2;
 +-----------------------------------------------------+--------------+----------------+
 | title                                               | author_fname | author_lname   |
@@ -331,6 +421,10 @@ mysql> SELECT title, author_fname, author_lname  FROM books ORDER BY 2;
 | What We Talk About When We Talk About Love: Stories | Raymond      | Carver         |
 | Where I m Calling From: Selected Stories            | Raymond      | Carver         |
 +-----------------------------------------------------+--------------+----------------+
+
+-- When we try to provide an index which is not present in select clause it will give error
+mysql> SELECT title, author_fname, author_lname  FROM books ORDER BY 7;
+ERROR 1054 (42S22): Unknown column '7' in 'order clause'
 
 
 mysql> SELECT author_fname, author_lname FROM books;
@@ -358,6 +452,34 @@ mysql> SELECT author_fname, author_lname FROM books;
 | George       | Saunders       |
 +--------------+----------------+
 
+-- Select author_fname & author_lname, ORDER BY author_fname
+mysql> SELECT author_fname, author_lname FROM books ORDER BY author_fname;
++--------------+----------------+
+| author_fname | author_lname   |
++--------------+----------------+
+| Dan          | Harris         |
+| Dave         | Eggers         |
+| Dave         | Eggers         |
+| Dave         | Eggers         |
+| David        | Foster Wallace |
+| David        | Foster Wallace |
+| Don          | DeLillo        |
+| Freida       | Harris         |
+| George       | Saunders       |
+| Jhumpa       | Lahiri         |
+| Jhumpa       | Lahiri         |
+| John         | Steinbeck      |
+| Michael      | Chabon         |
+| Neil         | Gaiman         |
+| Neil         | Gaiman         |
+| Neil         | Gaiman         |
+| Patti        | Smith          |
+| Raymond      | Carver         |
+| Raymond      | Carver         |
++--------------+----------------+
+
+-- Select author_fname & author_lname, ORDER BY author_lname
+-- it sort it on author_lname but for Harris it does not work with last name ( fname F comes before D) 
 mysql> SELECT author_fname, author_lname FROM books ORDER BY author_lname;
 +--------------+----------------+
 | author_fname | author_lname   |
@@ -383,6 +505,8 @@ mysql> SELECT author_fname, author_lname FROM books ORDER BY author_lname;
 | John         | Steinbeck      |
 +--------------+----------------+
 
+-- The above problem can be solve as 
+-- notice for Harris first name D is coming befor F
 mysql> SELECT author_fname, author_lname FROM books ORDER BY author_lname, author_fname;
 +--------------+----------------+
 | author_fname | author_lname   |
@@ -407,11 +531,16 @@ mysql> SELECT author_fname, author_lname FROM books ORDER BY author_lname, autho
 | Patti        | Smith          |
 | John         | Steinbeck      |
 +--------------+----------------+
-Sort  by lastname first then by first name.
 
-LIMIT
-==========
+/*-----------------------------------------------------------*/
 
+
+
+/*-- LIMIT --*/
+/*-----------*/
+
+-- LIMIT topThisIndex
+-- it will show only top 3 rows
 mysql> SELECT title FROM books LIMIT 3;                                                                             
 +-----------------+
 | title           |
@@ -421,9 +550,13 @@ mysql> SELECT title FROM books LIMIT 3;
 | American Gods   |
 +-----------------+
 
+-- LIMIT index, toThisIndex
+-- Below query will show only top 5 rows
 mysql> SELECT title,released_year FROM books ORDER BY released_year DESC LIMIT 5;
+
+-- We can select the range also like in below example
+-- Here 0 represent row index and 5 represent count after the index
 mysql> SELECT title,released_year FROM books ORDER BY released_year DESC LIMIT 0,5; 
---Here 0 represent row index and 5 represent count after the index
 +----------------------------------+---------------+
 | title                            | released_year |
 +----------------------------------+---------------+
@@ -433,6 +566,8 @@ mysql> SELECT title,released_year FROM books ORDER BY released_year DESC LIMIT 0
 | The Circle                       |          2013 |
 | A Hologram for the King: A Novel |          2012 |
 +----------------------------------+---------------+
+
+-- Some Examples
 
 mysql> SELECT title,released_year FROM books ORDER BY released_year DESC LIMIT 0,1;
 +----------------------+---------------+
@@ -455,7 +590,8 @@ mysql> SELECT title,released_year FROM books ORDER BY released_year DESC LIMIT 2
 | 10% Happier |          2014 |
 +-------------+---------------+
 
-mysql> SELECT title FROM books LIMIT 5, 123219476457;--To select all books
+-- To select all books after an index
+mysql> SELECT title FROM books LIMIT 5, 123219476457;
 +-----------------------------------------------------+
 | title                                               |
 +-----------------------------------------------------+
@@ -477,9 +613,14 @@ mysql> SELECT title FROM books LIMIT 5, 123219476457;--To select all books
 
 
 
-LIKE
-===========
+/*-----------------------------------------------------------*/
 
+
+
+/*-- LIKE --*/
+/*-----------*/
+
+-- Select author fname where fname contain "da"
 mysql> SELECT title, author_fname FROM books WHERE author_fname LIKE '%da%';
 +-------------------------------------------+--------------+
 | title                                     | author_fname |
@@ -493,6 +634,7 @@ mysql> SELECT title, author_fname FROM books WHERE author_fname LIKE '%da%';
 | fake_book                                 | Freida       |
 +-------------------------------------------+--------------+
 
+-- Select author fname where fname ends with "da"
 mysql> SELECT title, author_fname FROM books WHERE author_fname LIKE '%da';
 +-----------+--------------+
 | title     | author_fname |
@@ -500,6 +642,7 @@ mysql> SELECT title, author_fname FROM books WHERE author_fname LIKE '%da';
 | fake_book | Freida       |
 +-----------+--------------+
 
+-- Select author fname where fname starts with "da"
 mysql> SELECT title, author_fname FROM books WHERE author_fname LIKE 'da%';
 +-------------------------------------------+--------------+
 | title                                     | author_fname |
@@ -512,10 +655,16 @@ mysql> SELECT title, author_fname FROM books WHERE author_fname LIKE 'da%';
 | 10% Happier                               | Dan          |
 +-------------------------------------------+--------------+
 
-WILDCARD
-========
-_ -> 1 charcter
+/*-----------------------------------------------------------*/
 
+
+
+/*-- WILDCARD --*/
+/*--------------*/
+
+-- "_" represent 1 charcter
+
+-- Normal query
 mysql> SELECT title, stock_quantity FROM books;
 +-----------------------------------------------------+----------------+
 | title                                               | stock_quantity |
@@ -541,14 +690,16 @@ mysql> SELECT title, stock_quantity FROM books;
 | Lincoln In The Bardo                                |           1000 |
 +-----------------------------------------------------+----------------+
 
-mysql> SELECT title, stock_quantity FROM books WHERE stock_quantity LIKE '____'; --4                                 
+-- Select stock quantity where it of 4 digits 
+mysql> SELECT title, stock_quantity FROM books WHERE stock_quantity LIKE '____';                                 
 +----------------------+----------------+
 | title                | stock_quantity |
 +----------------------+----------------+
 | Lincoln In The Bardo |           1000 |
 +----------------------+----------------+
 
-mysql> SELECT title, stock_quantity FROM books WHERE stock_quantity LIKE '___'; --3
+-- Select stock quantity where it of 3 digits 
+mysql> SELECT title, stock_quantity FROM books WHERE stock_quantity LIKE '___';
 +-------------------------------------------+----------------+
 | title                                     | stock_quantity |
 +-------------------------------------------+----------------+
@@ -559,8 +710,8 @@ mysql> SELECT title, stock_quantity FROM books WHERE stock_quantity LIKE '___'; 
 | fake_book                                 |            287 |
 +-------------------------------------------+----------------+
 
-To search a special caracter in LIKE use "\-backward slach";
-
+-- To search a special caracter in LIKE use "\specialCharacter" backward slach eg: '\%';
+-- Select a title where title has '%' symbol
 mysql> SELECT title, stock_quantity FROM books WHERE title LIKE '%\%%';                                                 
 +-------------+----------------+
 | title       | stock_quantity |
@@ -568,6 +719,7 @@ mysql> SELECT title, stock_quantity FROM books WHERE title LIKE '%\%%';
 | 10% Happier |             29 |
 +-------------+----------------+
 
+-- Select a title where title has '_' symbol
 mysql> SELECT title, stock_quantity FROM books WHERE title LIKE '%\_%';                                       
 +-----------+----------------+
 | title     | stock_quantity |
@@ -575,6 +727,7 @@ mysql> SELECT title, stock_quantity FROM books WHERE title LIKE '%\_%';
 | fake_book |            287 |
 +-----------+----------------+
 
+-- Select where author fname contans 'da' and two character at the end of the string  
 mysql> SELECT title, author_fname FROM books WHERE author_fname LIKE '%da__';
 +-------------------------------------------+--------------+
 | title                                     | author_fname |
@@ -585,10 +738,14 @@ mysql> SELECT title, author_fname FROM books WHERE author_fname LIKE '%da__';
 +-------------------------------------------+--------------+
 
 
+/*-----------------------------------------------------------*/
 
-EXERCISE---
-========================
 
+
+/*-- EXERCISE --*/
+/*--------------*/
+
+-- Select where title has 'stories' in it 
 mysql> SELECT title FROM books WHERE title LIKE '%stories%';
 +-----------------------------------------------------+
 | title                                               |
@@ -598,6 +755,7 @@ mysql> SELECT title FROM books WHERE title LIKE '%stories%';
 | Oblivion: Stories                                   |
 +-----------------------------------------------------+
 
+-- Select where you have to limit the output in decending by order to top one row
 mysql> SELECT title, pages FROM books ORDER BY pages DESC LIMIT 1;
 mysql> SELECT title, pages FROM books ORDER BY pages DESC LIMIT 0,1;
 +-------------------------------------------+-------+
@@ -606,6 +764,8 @@ mysql> SELECT title, pages FROM books ORDER BY pages DESC LIMIT 0,1;
 | The Amazing Adventures of Kavalier & Clay |   634 |
 +-------------------------------------------+-------+
 
+-- Select where you have to limit the output in decending by order to top three row
+mysql> SELECT CONCAT(title,' - ',released_year) AS summary FROM books ORDER BY released_year DESC LIMIT 3;
 mysql> SELECT CONCAT(title,' - ',released_year) AS summary FROM books ORDER BY released_year DESC LIMIT 0,3;
 +-----------------------------+
 | summary                     |
@@ -615,6 +775,7 @@ mysql> SELECT CONCAT(title,' - ',released_year) AS summary FROM books ORDER BY r
 | 10% Happier - 2014          |
 +-----------------------------+
 
+-- Select where auther laname contain space
 mysql> SELECT title, author_lname FROM books WHERE author_lname LIKE '%\ %';
 mysql> SELECT title, author_lname FROM books WHERE author_lname LIKE '% %';                                           
 +----------------------+----------------+
@@ -624,6 +785,7 @@ mysql> SELECT title, author_lname FROM books WHERE author_lname LIKE '% %';
 | Consider the Lobster | Foster Wallace |
 +----------------------+----------------+
 
+-- Select where you have to order by ascending and select top 3 rows
 mysql> SELECT title, released_year, stock_quantity FROM books ORDER BY stock_quantity LIMIT 3;                          
 +-----------------------------------------------------+---------------+----------------+
 | title                                               | released_year | stock_quantity |
@@ -633,6 +795,7 @@ mysql> SELECT title, released_year, stock_quantity FROM books ORDER BY stock_qua
 | What We Talk About When We Talk About Love: Stories |          1981 |             23 |
 +-----------------------------------------------------+---------------+----------------+
 
+-- Select and order by auther lname first and then after title
 mysql> SELECT title, author_lname FROM books ORDER BY author_lname, title;
 mysql> SELECT title, author_lname FROM books ORDER BY 2,1;
 +-----------------------------------------------------+----------------+
@@ -659,6 +822,7 @@ mysql> SELECT title, author_lname FROM books ORDER BY 2,1;
 | Cannery Row                                         | Steinbeck      |
 +-----------------------------------------------------+----------------+
 
+-- Displya output in ascending order of auther lname and output mut be as "MY FAVORITE AUTHOR IS 'fname lname'!" under 'yell' column
 mysql> SELECT CONCAT('MY FAVORITE AUTHOR IS ',author_fname,' ',author_lname,'!') AS 'yell' FROM books ORDER BY author_lname;
 +---------------------------------------------+
 | yell                                        |
