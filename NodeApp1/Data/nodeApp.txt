@@ -1,0 +1,141 @@
+1)
+for(var i = 0; i < 500; i++){
+  console.log("HELLO WORLD!");
+}
+
+
+2)
+npm install faker
+
+function generateAddress(){
+  console.log(faker.address.streetAddress());
+  console.log(faker.address.city());
+  console.log(faker.address.state());
+}
+
+
+
+3)
+Documentatiomn- https://github.com/mysqljs/mysql
+
+var mysql = require('mysql');
+ 
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  database : 'join_us'
+});
+
+
+
+4)
+npm install mysql
+
+Connect to Database*
+var mysql = require('mysql');
+ 
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',     // your root username
+  database : 'join_us'   // the name of your db
+});
+
+
+
+var q = 'SELECT CURTIME() as time, CURDATE() as date, NOW() as now';
+connection.query(q, function (error, results, fields) {
+  if (error) throw error;
+  console.log(results[0].time);
+  console.log(results[0].date);
+  console.log(results[0].now);
+});
+
+
+
+
+
+5)
+var q = 'SELECT * FROM users ';
+connection.query(q, function (error, results, fields) {
+  if (error) throw error;
+  console.log(results);
+});
+
+var q = 'SELECT COUNT(*) AS total FROM users ';
+connection.query(q, function (error, results, fields) {
+  if (error) throw error;
+  console.log(results[0].total);
+});
+
+
+6)
+Inserting Data Using Node
+Approach #1
+
+var q = 'INSERT INTO users (email) VALUES ("rusty_the_dog@gmail.com")';
+ 
+connection.query(q, function (error, results, fields) {
+  if (error) throw error;
+  console.log(results);
+});
+
+
+An easier approach that allows for dynamic data
+
+
+
+var person = {
+    email: faker.internet.email(),
+    created_at: faker.date.past()
+};
+ 
+var end_result = connection.query('INSERT INTO users SET ?', person, function(err, result) {
+  if (err) throw err;
+  console.log(result);
+});
+
+
+
+
+7)
+
+The Code To INSERT 500 Random Users
+var mysql = require('mysql');
+var faker = require('faker');
+ 
+ 
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  database : 'join_us'
+});
+ 
+ 
+var data = [];
+for(var i = 0; i < 500; i++){
+    data.push([
+        faker.internet.email(),
+        faker.date.past()
+    ]);
+}
+ 
+ 
+var q = 'INSERT INTO users (email, created_at) VALUES ?';
+ 
+connection.query(q, [data], function(err, result) {
+  console.log(err);
+  console.log(result);
+});
+ 
+connection.end
+
+
+
+
+
+
+
+
+
+
+
