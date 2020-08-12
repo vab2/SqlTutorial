@@ -102,10 +102,7 @@ self join??
 ## 14 CREATED NODE APP
 
 ## 15 DATABASE TRIGGERS
-1) 
-2) 
-3) 
-4) 
-5)
-6)
-7)
+1) A Simple Validation
+2) Preventing Self-Follows
+3) Logging Unfollows
+4) Managing Triggers
