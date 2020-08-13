@@ -77,8 +77,6 @@
 7) All Joins (Imp)
 8) EXERCISE example
 
-self join??
-
 ## 12 MANY TO MANY
 1) Chalange 1
 2) Chalange 2
@@ -106,3 +104,5 @@ self join??
 2) Preventing Self-Follows
 3) Logging Unfollows
 4) Managing Triggers
+
+## 16 SELF JOIN

@@ -216,3 +216,13 @@ HAVING num_likes = (SELECT Count(*) FROM   photos);
 | Bethany20          |       257 |
 +--------------------+-----------+
 
+
+-- TO print followee_id and follower_id name along with them
+SELECT follower_id, followerUser.username AS follower, 
+    followee_id, followeeUser.username AS followee
+FROM follows
+INNER JOIN users followerUser
+    ON follows.follower_id = followerUser.id
+INNER JOIN users followeeUser
+    ON follows.followee_id = followeeUser.id
+ORDER BY follower_id;
